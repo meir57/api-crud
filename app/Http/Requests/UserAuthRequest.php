@@ -2,23 +2,20 @@
 
 namespace App\Http\Requests;
 
-use App\Dto\TaskDto;
-use App\Enums\Status\StatusEnum;
+use App\Dto\UserDto;
 use App\Http\Responses\UnprocessableEntityResponse;
-use App\Rules\TaskStatusRule;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class UpdateTaskRequest extends AbstractFormRequest
+class UserAuthRequest extends AbstractFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return true;
     }
 
     /**
@@ -29,25 +26,26 @@ class UpdateTaskRequest extends AbstractFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
-            'description' => ['nullable'],
-            'status' => ['nullable', new TaskStatusRule()],
+            'email' => 'required|email',
+            'password' => 'required|min:8',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name' => __('Task name is not specified.'),
+            'email' => __('Email is not specified.'),
+            'email.email' => __('Email is not valid.'),
+            'password' => __('Password is not specified.'),
+            'password.min' => __('Password should be at least 8 symbols.'),
         ];
     }
 
-    public function getDto(): TaskDto
+    public function getDto(): UserDto
     {
-        return new TaskDto(
-            $this->name,
-            $this->description,
-            StatusEnum::tryFrom($this->status) ?? StatusEnum::UNFINISHED,
+        return new UserDto(
+            $this->email,
+            $this->password,
         );
     }
 
