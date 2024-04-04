@@ -24,6 +24,7 @@ class TaskService implements TaskServiceInterface
     public function getAll(): array
     {
         return $this->taskRepository->select([
+            'id',
             'name',
             'description',
             'status'
