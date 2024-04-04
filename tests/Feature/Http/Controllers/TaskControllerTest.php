@@ -13,6 +13,12 @@ class TaskControllerTest extends TestCase
      */
     public function test_example(): void
     {
+        /*
+
+            404. Ups, tests not found, come later ;)
+
+        */
+
         $response = $this->get('/');
 
         $response->assertStatus(200);
