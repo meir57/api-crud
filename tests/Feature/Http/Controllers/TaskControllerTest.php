@@ -147,6 +147,7 @@ class TaskControllerTest extends TestCase
         // Assert
         $response->assertJsonFragment(['success' => true]);
         $response->assertStatus(Response::HTTP_OK);
+        $this->assertDatabaseMissing((new Task())->getTable(), $task);
         $this->assertDatabaseHas((new Task())->getTable(), $updatedTask);
     }
 
