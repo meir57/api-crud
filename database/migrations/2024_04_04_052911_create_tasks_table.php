@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
             $table->enum('status', StatusEnum::values())->default(StatusEnum::UNFINISHED);
+            $table->integer('user_id')->index('uid');
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

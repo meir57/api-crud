@@ -21,7 +21,7 @@ class TaskFactory extends Factory
             'name' => $this->faker->sentence(3),
             'description' => $this->faker->sentence(5),
             'status' => $this->faker->randomElement(StatusEnum::values()),
-            'user_id' => auth()->user()?->getAuthIdentifier(),
+            'user_id' => auth()->user()->getAuthIdentifier(),
         ];
     }
 }
