@@ -2,16 +2,11 @@
 
 namespace Tests\Feature\Http\Controllers;
 
-use App\Enums\Status\StatusEnum;
 use App\Models\Task;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Laravel\Sanctum\Sanctum;
 use Symfony\Component\HttpFoundation\Response;
-use Tests\TestCase;
+use Tests\Feature\AbstractTestCase;
 
-class TaskControllerTest extends TestCase
+class TaskControllerTest extends AbstractTestCase
 {
     private const API_ROUTE = '/api/tasks/';
 
@@ -28,7 +23,7 @@ class TaskControllerTest extends TestCase
     public function test_tasks_index_authorized(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
+        $this->login();
 
         // Act
         $response = $this->get(self::API_ROUTE);
@@ -41,10 +36,7 @@ class TaskControllerTest extends TestCase
     public function test_tasks_store_unauthorized(): void
     {
         // Arrange
-        $task = [
-            'name' => 'Test task 1',
-            'description' => 'Test description 1'
-        ];
+        $task = $this->makeTask();
 
         // Act
         $response = $this->post(self::API_ROUTE, $task);
@@ -57,11 +49,8 @@ class TaskControllerTest extends TestCase
     public function test_tasks_store_authorized(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
-        $task = [
-            'name' => 'Test task 2',
-            'description' => 'Test description 2'
-        ];
+        $this->login();
+        $task = $this->makeTask();
 
         // Act
         $response = $this->post(self::API_ROUTE, $task);
@@ -75,7 +64,7 @@ class TaskControllerTest extends TestCase
     public function test_tasks_show_nonexistant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
+        $this->login();
         $taskId = -1;
 
         // Act
@@ -89,13 +78,10 @@ class TaskControllerTest extends TestCase
     public function test_tasks_show_existant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
-        $task = [
-            'name' => 'Test task 3',
-            'description' => 'Test description 3'
-        ];
-        $this->post(self::API_ROUTE, $task);
-        $createdTask = end($this->get(self::API_ROUTE)->json()['data']);
+        $this->login();
+        $task = $this->makeTask();
+        $this->postJson(self::API_ROUTE, $task);
+        $createdTask = current($this->get(self::API_ROUTE)['data']);
         $targetTaskId = $createdTask['id'];
 
         // Act
@@ -109,12 +95,9 @@ class TaskControllerTest extends TestCase
     public function test_tasks_update_nonexistant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
+        $this->login();
         $targetTaskId = -1;
-        $task = [
-            'name' => 'Test task 4',
-            'description' => 'Test description 4',
-        ];
+        $task = $this->makeTask();
 
         // Act
         $response = $this->put(self::API_ROUTE . $targetTaskId, $task);
@@ -127,19 +110,12 @@ class TaskControllerTest extends TestCase
     public function test_tasks_update_existant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
-        $task = [
-            'name' => 'Test task 5',
-            'description' => 'Test description 5'
-        ];
-        $this->post(self::API_ROUTE, $task);
-        $createdTask = current($this->get(self::API_ROUTE)->json()['data']);
+        $this->login();
+        $task = $this->makeTask();
+        $this->postJson(self::API_ROUTE, $task);
+        $createdTask = current($this->get(self::API_ROUTE)['data']);
         $targetTaskId = $createdTask['id'];
-        $updatedTask = [
-            'name' => 'New test task 1',
-            'description' => 'New test description 1',
-            'status' => StatusEnum::FINISHED->value,
-        ];
+        $updatedTask = $this->makeTask();
 
         // Act
         $response = $this->put(self::API_ROUTE . $targetTaskId, $updatedTask);
@@ -154,7 +130,7 @@ class TaskControllerTest extends TestCase
     public function test_tasks_delete_nonexistant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
+        $this->login();
         $targetTaskId = -1;
 
         // Act
@@ -168,11 +144,8 @@ class TaskControllerTest extends TestCase
     public function test_tasks_delete_existant_task(): void
     {
         // Arrange
-        Sanctum::actingAs(User::factory()->create());
-        $task = [
-            'name' => 'Test task 6',
-            'description' => 'Test description 6'
-        ];
+        $this->login();
+        $task = $this->makeTask();
         $this->post(self::API_ROUTE, $task);
         $createdTask = end($this->get(self::API_ROUTE)->json()['data']);
         $targetTaskId = $createdTask['id'];
