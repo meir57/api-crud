@@ -13,19 +13,20 @@
 					"name": "create",
 					"request": {
 						"auth": {
-							"type": "noauth"
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
 						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Task 1\",\n    \"description\": \"Stay happy!\",\n    \"status\": \"finished\"\n}",
+							"raw": "{\n    \"name\": \"Task 1\",\n    \"description\": \"Stay active!\",\n    \"status\": \"unfinished\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -49,14 +50,18 @@
 				{
 					"name": "read",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "localhost:8000/api/tasks/1",
 							"host": [
@@ -75,14 +80,18 @@
 				{
 					"name": "update",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"name\": \"Task 1\",\n    \"description\": \"Stay active & hydrated!\",\n    \"status\": \"finished\"\n}",
@@ -110,16 +119,20 @@
 				{
 					"name": "delete",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
-							"raw": "localhost:8000/api/tasks/2",
+							"raw": "localhost:8000/api/tasks/1",
 							"host": [
 								"localhost"
 							],
@@ -127,7 +140,7 @@
 							"path": [
 								"api",
 								"tasks",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -141,6 +154,9 @@
 				{
 					"name": "login",
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "POST",
 						"header": [],
 						"body": {
@@ -167,16 +183,49 @@
 					"response": []
 				},
 				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/api/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "user",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"url": {
 							"raw": "localhost:8000/api/user",
 							"host": [
@@ -196,14 +245,18 @@
 		{
 			"name": "all tasks",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "1|1fth1RgkeAFN07abyyMI3wBklyo3AiarHmBNHhFY1fd1d60e",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer 1|4SDBCycDg8oTNpGUphSdrPLe0aEnlC1wtyhpphQGcbe502f6",
-						"type": "text"
-					}
-				],
+				"header": [],
 				"url": {
 					"raw": "127.0.0.1:8000/api/tasks",
 					"host": [
