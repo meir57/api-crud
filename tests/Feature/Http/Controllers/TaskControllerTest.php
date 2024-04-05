@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers;
 
+use App\Enums\Status\StatusEnum;
 use App\Models\Task;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -41,8 +42,8 @@ class TaskControllerTest extends TestCase
     {
         // Arrange
         $task = [
-            'name' => 'Test task',
-            'description' => 'Test description'
+            'name' => 'Test task 1',
+            'description' => 'Test description 1'
         ];
 
         // Act
@@ -58,8 +59,8 @@ class TaskControllerTest extends TestCase
         // Arrange
         Sanctum::actingAs(User::factory()->create());
         $task = [
-            'name' => 'Test task',
-            'description' => 'Test description'
+            'name' => 'Test task 2',
+            'description' => 'Test description 2'
         ];
 
         // Act
@@ -85,5 +86,102 @@ class TaskControllerTest extends TestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    // to be continued
+    public function test_tasks_show_existant_task(): void
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+        $task = [
+            'name' => 'Test task 3',
+            'description' => 'Test description 3'
+        ];
+        $this->post(self::API_ROUTE, $task);
+        $createdTask = end($this->get(self::API_ROUTE)->json()['data']);
+        $targetTaskId = $createdTask['id'];
+
+        // Act
+        $response = $this->get(self::API_ROUTE . $targetTaskId);
+
+        // Assert
+        $response->assertJsonFragment(['success' => true]);
+        $response->assertStatus(Response::HTTP_OK);
+    }
+
+    public function test_tasks_update_nonexistant_task(): void
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+        $targetTaskId = -1;
+        $task = [
+            'name' => 'Test task 4',
+            'description' => 'Test description 4',
+        ];
+
+        // Act
+        $response = $this->put(self::API_ROUTE . $targetTaskId, $task);
+
+        // Assert
+        $response->assertJsonFragment(['success' => false]);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    public function test_tasks_update_existant_task(): void
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+        $task = [
+            'name' => 'Test task 5',
+            'description' => 'Test description 5'
+        ];
+        $this->post(self::API_ROUTE, $task);
+        $createdTask = current($this->get(self::API_ROUTE)->json()['data']);
+        $targetTaskId = $createdTask['id'];
+        $updatedTask = [
+            'name' => 'New test task 1',
+            'description' => 'New test description 1',
+            'status' => StatusEnum::FINISHED->value,
+        ];
+
+        // Act
+        $response = $this->put(self::API_ROUTE . $targetTaskId, $updatedTask);
+
+        // Assert
+        $response->assertJsonFragment(['success' => true]);
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertDatabaseHas((new Task())->getTable(), $updatedTask);
+    }
+
+    public function test_tasks_delete_nonexistant_task(): void
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+        $targetTaskId = -1;
+
+        // Act
+        $response = $this->delete(self::API_ROUTE . $targetTaskId);
+
+        // Assert
+        $response->assertJsonFragment(['success' => false]);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
+    }
+
+    public function test_tasks_delete_existant_task(): void
+    {
+        // Arrange
+        Sanctum::actingAs(User::factory()->create());
+        $task = [
+            'name' => 'Test task 6',
+            'description' => 'Test description 6'
+        ];
+        $this->post(self::API_ROUTE, $task);
+        $createdTask = end($this->get(self::API_ROUTE)->json()['data']);
+        $targetTaskId = $createdTask['id'];
+
+        // Act
+        $response = $this->delete(self::API_ROUTE . $targetTaskId);
+
+        // Assert
+        $response->assertJsonFragment(['success' => true]);
+        $response->assertStatus(Response::HTTP_OK);
+        $this->assertDatabaseMissing((new Task())->getTable(), $task);
+    }
 }
