@@ -61,7 +61,7 @@ class TaskControllerTest extends AbstractTestCase
         $this->assertDatabaseHas((new Task())->getTable(), $task);
     }
 
-    public function test_tasks_show_nonexistant_task(): void
+    public function test_tasks_show_nonexistent_task(): void
     {
         // Arrange
         $this->login();
@@ -75,14 +75,12 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_show_existant_task(): void
+    public function test_tasks_show_existent_task(): void
     {
         // Arrange
         $this->login();
-        $task = $this->makeTask();
-        $this->postJson(self::API_ROUTE, $task);
-        $createdTask = current($this->get(self::API_ROUTE)['data']);
-        $targetTaskId = $createdTask['id'];
+        $task = $this->makeTask(save: true);
+        $targetTaskId = $task['id'];
 
         // Act
         $response = $this->get(self::API_ROUTE . $targetTaskId);
@@ -90,9 +88,17 @@ class TaskControllerTest extends AbstractTestCase
         // Assert
         $response->assertJsonFragment(['success' => true]);
         $response->assertStatus(Response::HTTP_OK);
+        $response->assertJsonFragment([
+            'data' => [
+                'id' => $task['id'],
+                'name' => $task['name'],
+                'description' => $task['description'],
+                'status' => $task['status'],
+            ]
+        ]);
     }
 
-    public function test_tasks_update_nonexistant_task(): void
+    public function test_tasks_update_nonexistent_task(): void
     {
         // Arrange
         $this->login();
@@ -107,16 +113,14 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_update_existant_task(): void
+    public function test_tasks_update_existent_task(): void
     {
         // Arrange
         $this->login();
-        $task = $this->makeTask();
-        $this->postJson(self::API_ROUTE, $task);
-        $createdTask = current($this->get(self::API_ROUTE)['data']);
-        $targetTaskId = $createdTask['id'];
+        $task = $this->makeTask(save: true);
+        $targetTaskId = $task['id'];
         $updatedTask = $this->makeTask();
-
+        
         // Act
         $response = $this->put(self::API_ROUTE . $targetTaskId, $updatedTask);
 
@@ -127,7 +131,7 @@ class TaskControllerTest extends AbstractTestCase
         $this->assertDatabaseHas((new Task())->getTable(), $updatedTask);
     }
 
-    public function test_tasks_delete_nonexistant_task(): void
+    public function test_tasks_delete_nonexistent_task(): void
     {
         // Arrange
         $this->login();
@@ -141,14 +145,12 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_delete_existant_task(): void
+    public function test_tasks_delete_existent_task(): void
     {
         // Arrange
         $this->login();
-        $task = $this->makeTask();
-        $this->post(self::API_ROUTE, $task);
-        $createdTask = end($this->get(self::API_ROUTE)->json()['data']);
-        $targetTaskId = $createdTask['id'];
+        $task = $this->makeTask(save: true);
+        $targetTaskId = $task['id'];
 
         // Act
         $response = $this->delete(self::API_ROUTE . $targetTaskId);
