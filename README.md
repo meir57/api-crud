@@ -19,11 +19,12 @@
 - PHP v8.2
 - Laravel v10.10
 - PostgreSQL v16.2 (optional, if you use another driver)
+- php8.2-pdo & php8.2-sqlite3 extensions for in-memory testing
 
 ### Credentials
 
-*email:* meirbek@meir.com
-*password:* qwerty12345678
+- *email:* meirbek@meir.com
+- *password:* qwerty12345678
 
 Also available in `database/seeders/DatabaseSeeder.php` file
 
