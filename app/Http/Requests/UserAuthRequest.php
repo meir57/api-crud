@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Dto\UserDto;
+use App\Dto\User\UserDto;
 use App\Http\Responses\UnprocessableEntityResponse;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;

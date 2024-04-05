@@ -23,7 +23,7 @@ class TaskController extends Controller
     public function index(): SuccessResponse
     {
         return new SuccessResponse(
-            $this->taskService->getAll(),
+            $this->taskService->getAssociatedTasks(),
         );
     }
 

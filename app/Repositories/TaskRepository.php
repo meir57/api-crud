@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace App\Repositories;
 
-use App\Dto\TaskDto;
 use App\Models\Task;
 use App\Repositories\Interfaces\TaskRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
 
 class TaskRepository implements TaskRepositoryInterface
 {
-    public function insert(TaskDto $taskDto): bool
+    public function insert(array $task): bool
     {
-        return Task::create($taskDto->toArray())->save();
-    }
-
-    public function select(array $columns = null): Collection
-    {
-        return Task::select($columns)->get();
+        return Task::create($task)->save();
     }
 
     public function delete(int $taskId): bool

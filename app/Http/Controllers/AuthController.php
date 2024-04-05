@@ -15,14 +15,12 @@ class AuthController extends Controller
     ){
     }
 
-    public function login(UserAuthRequest $request)
+    public function login(UserAuthRequest $userAuthRequest)
     {
-        $token = $this->authService->login($request->getDto());
+        $tokenDto = $this->authService->login($userAuthRequest->getDto());
         
-        if ($token) {
-            return new SuccessResponse(
-                ['token' => $token]
-            );
+        if ($tokenDto) {
+            return new SuccessResponse($tokenDto->toArray());
         }
 
         return new ErrorResponse([], __('Invalid credentials.'));
@@ -30,6 +28,13 @@ class AuthController extends Controller
 
     public function user(Request $request)
     {
-        return new SuccessResponse($request->user());
+        return new SuccessResponse($this->authService->format($request->user()));
+    }
+
+    public function logout(): SuccessResponse
+    {
+        $this->authService->logout();
+
+        return new SuccessResponse();
     }
 }

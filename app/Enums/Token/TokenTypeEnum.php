@@ -9,7 +9,7 @@ enum TokenTypeEnum: string
 {
     use EnumTrait;
     
-    case AUTH_TOKEN = 'auth-token';
+    case BEARER_TOKEN = 'Bearer';
 
     /*
         we can add more token types if necessary

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\TaskVisibilityScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -12,7 +14,7 @@ class Task extends Model
     protected $guarded = [
         'id',
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     public function getId(): int
@@ -33,5 +35,16 @@ class Task extends Model
     public function getStatus(): string
     {
         return $this->status;
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new TaskVisibilityScope());
+    }
+
+    /*   relations   */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

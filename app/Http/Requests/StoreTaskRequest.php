@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Dto\TaskDto;
+use App\Dto\Task\TaskDto;
 use App\Enums\Status\StatusEnum;
 use App\Http\Requests\AbstractFormRequest;
 use App\Http\Responses\UnprocessableEntityResponse;
@@ -45,7 +45,12 @@ class StoreTaskRequest extends AbstractFormRequest
 
     public function getDto(): TaskDto
     {
-        return new TaskDto($this->name, $this->description, StatusEnum::tryFrom($this->status) ?? StatusEnum::UNFINISHED);
+        return new TaskDto(
+            $this->name, 
+            $this->description, 
+            StatusEnum::tryFrom($this->status) ?? StatusEnum::UNFINISHED,
+            auth()->user()->getAuthIdentifier(),
+        );
     }
 
     protected function failedValidation(Validator $validator): void
