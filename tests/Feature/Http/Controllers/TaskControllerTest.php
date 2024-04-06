@@ -10,7 +10,7 @@ class TaskControllerTest extends AbstractTestCase
 {
     private const API_ROUTE = '/api/tasks/';
 
-    public function test_tasks_index_unauthorized(): void
+    public function testTasksIndexUnauthorized(): void
     {
         // Act
         $response = $this->get(self::API_ROUTE);
@@ -20,7 +20,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function test_tasks_index_authorized(): void
+    public function testTasksIndexAuthorized(): void
     {
         // Arrange
         $this->login();
@@ -33,7 +33,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_OK);
     }
 
-    public function test_tasks_store_unauthorized(): void
+    public function testTasksStoreUnauthorized(): void
     {
         // Arrange
         $task = $this->makeTask();
@@ -46,7 +46,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function test_tasks_store_authorized(): void
+    public function testTasksStoreAuthorized(): void
     {
         // Arrange
         $this->login();
@@ -61,7 +61,7 @@ class TaskControllerTest extends AbstractTestCase
         $this->assertDatabaseHas((new Task())->getTable(), $task);
     }
 
-    public function test_tasks_show_nonexistent_task(): void
+    public function testTasksShowNonexistentTask(): void
     {
         // Arrange
         $this->login();
@@ -75,7 +75,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_show_existent_task(): void
+    public function testTasksShowExistentTask(): void
     {
         // Arrange
         $this->login();
@@ -98,7 +98,7 @@ class TaskControllerTest extends AbstractTestCase
         ]);
     }
 
-    public function test_tasks_update_nonexistent_task(): void
+    public function testTasksUpdateNonexistentTask(): void
     {
         // Arrange
         $this->login();
@@ -113,7 +113,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_update_existent_task(): void
+    public function testTasksUpdateExistentTask(): void
     {
         // Arrange
         $this->login();
@@ -131,7 +131,7 @@ class TaskControllerTest extends AbstractTestCase
         $this->assertDatabaseHas((new Task())->getTable(), $updatedTask);
     }
 
-    public function test_tasks_delete_nonexistent_task(): void
+    public function testTasksDeleteNonexistentTask(): void
     {
         // Arrange
         $this->login();
@@ -145,7 +145,7 @@ class TaskControllerTest extends AbstractTestCase
         $response->assertStatus(Response::HTTP_NOT_FOUND);
     }
 
-    public function test_tasks_delete_existent_task(): void
+    public function testTasksDeleteExistentTask(): void
     {
         // Arrange
         $this->login();
