@@ -1,6 +1,8 @@
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-## REST API for ToDoList Application
+## SPA + REST API for ToDoList Application
+
+![image](https://github.com/meir57/api-crud/assets/153067359/5537a8ef-c6e0-4660-9585-b7ea7a2c3fd3)
 
 ### Installation
 
