@@ -38,11 +38,11 @@ class TaskDto
 
     public function toArray(): array
     {
-        return [
-            'name' => $this->getName(),
+        return array_filter([
+            'name' => $this->getName() ?: null,
             'description' => $this->getDescription(),
             'status' => $this->getStatus(),
             'user_id' => $this->getUserId(),
-        ];
+        ], fn(mixed $value) => isset($value));
     }
 }

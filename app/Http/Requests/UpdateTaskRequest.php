@@ -29,23 +29,16 @@ class UpdateTaskRequest extends AbstractFormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required'],
+            'name' => ['nullable'],
             'description' => ['nullable'],
             'status' => ['nullable', new TaskStatusRule()],
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-            'name' => __('Task name is not specified.'),
         ];
     }
 
     public function getDto(): TaskDto
     {
         return new TaskDto(
-            $this->name, 
+            $this->name ?? '', 
             $this->description, 
             StatusEnum::tryFrom($this->status) ?? StatusEnum::UNFINISHED,
             auth()->user()->getAuthIdentifier(),
