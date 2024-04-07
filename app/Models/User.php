@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\Status\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -47,6 +49,10 @@ class User extends Authenticatable
     /*  relations   */
     public function tasks(): HasMany
     {
-        return $this->hasMany(Task::class, 'user_id', 'id');
+        $sql = sprintf('CASE WHEN status = \'%s\' THEN 1 ELSE 2 END', 
+                        StatusEnum::UNFINISHED->value);
+        return $this->hasMany(Task::class, 'user_id', 'id')
+            ->orderByRaw($sql)
+            ->orderByDesc('id');
     }
 }

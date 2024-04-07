@@ -36,13 +36,6 @@ class StoreTaskRequest extends AbstractFormRequest
         ];
     }
 
-    public function messages(): array
-    {
-        return [
-            'name' => __('Task name is not specified.'),
-        ];
-    }
-
     public function getDto(): TaskDto
     {
         return new TaskDto(
