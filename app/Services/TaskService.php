@@ -21,9 +21,9 @@ class TaskService implements TaskServiceInterface
         return $this->taskRepository->insert($taskDto->toArray());   
     }
 
-    public function getAssociatedTasks(): array
+    public function getAssociatedTasks(): ?array
     {
-        return auth()->user()->tasks->map(fn(Task $task) => $this->format($task))->toArray();
+        return auth()->user()?->tasks->map(fn(Task $task) => $this->format($task))->toArray();
     }
 
     public function update(Task $task, TaskDto $taskDto): bool

@@ -10,7 +10,7 @@ class TaskDto
 {
     public function __construct(
         private string $name,
-        private string $description,
+        private ?string $description,
         private StatusEnum $status = StatusEnum::UNFINISHED,
         private int $userId,
     ){
@@ -21,7 +21,7 @@ class TaskDto
         return $this->name;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }

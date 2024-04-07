@@ -11,7 +11,7 @@ interface TaskServiceInterface
 {
     public function create(TaskDto $taskDto): bool;
     
-    public function getAssociatedTasks(): array;
+    public function getAssociatedTasks(): ?array;
 
     public function update(Task $task, TaskDto $taskDto): bool;
 
